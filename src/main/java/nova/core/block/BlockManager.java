@@ -3,20 +3,22 @@ package nova.core.block;
 import nova.core.event.CancelableEvent;
 import nova.core.event.CancelableEventBus;
 import nova.core.event.EventBus;
+import nova.core.util.Factory;
 import nova.core.item.ItemManager;
 import nova.core.util.Manager;
+import nova.core.util.RegistrationException;
 import nova.core.util.Registry;
 import nova.internal.core.Game;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class BlockManager extends Manager<Block, BlockFactory> {
+public class BlockManager extends Manager<Block, Factory<Block>> {
 
 	public final EventBus<BlockRegisteredEvent> blockRegisteredListeners = new CancelableEventBus<>();
 	private final Supplier<ItemManager> itemManager;
 
-	private BlockManager(Registry<BlockFactory> registry, Supplier<ItemManager> itemManager) {
+	private BlockManager(Registry<Factory<Block>> registry, Supplier<ItemManager> itemManager) {
 		super(registry);
 		this.itemManager = itemManager;
 	}
@@ -29,7 +31,7 @@ public class BlockManager extends Manager<Block, BlockFactory> {
 		return Game.blocks().get("air").get();
 	}
 
-	public BlockFactory getAirBlockFactory() {
+	public Factory<Block> getAirBlockFactory() {
 		return Game.blocks().getFactory("air").get();
 	}
 
@@ -39,17 +41,21 @@ public class BlockManager extends Manager<Block, BlockFactory> {
 	 * @return Dummy block
 	 */
 	@Override
-	public BlockFactory register(Function<Object[], Block> constructor) {
+	public Factory<Block> register(Function<Object[], Block> constructor) {
 		return register(new BlockFactory(constructor));
 	}
 
 	/**
 	 * Register a new block with custom constructor arguments.
-	 * @param factory {@link BlockFactory} of registered block
+	 * @param factory {@link Factory} of registered block
 	 * @return Dummy block
 	 */
 	@Override
-	public BlockFactory register(BlockFactory factory) {
+	public Factory<Block> register(Factory<Block> factory) throws RegistrationException{
+		if(!factory.name().isPresent())
+			throw new RegistrationException(String.format("Factory passed for registration is not named. [%s]", factory));
+
+
 		BlockRegisteredEvent event = new BlockRegisteredEvent(factory);
 		blockRegisteredListeners.publish(event);
 		registry.register(event.blockFactory);
@@ -64,5 +70,9 @@ public class BlockManager extends Manager<Block, BlockFactory> {
 		public BlockRegisteredEvent(BlockFactory blockFactory) {
 			this.blockFactory = blockFactory;
 		}
+	}
+
+	public <T> Factory<T> register(Class<T> blockClass) {
+
 	}
 }

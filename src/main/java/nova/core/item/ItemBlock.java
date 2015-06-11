@@ -1,7 +1,6 @@
 package nova.core.item;
 
 import nova.core.block.Block;
-import nova.core.block.BlockFactory;
 import nova.core.entity.Entity;
 import nova.core.util.Direction;
 import nova.core.world.World;

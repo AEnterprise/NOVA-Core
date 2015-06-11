@@ -1,6 +1,5 @@
 package nova.core.item;
 
-import nova.core.block.BlockFactory;
 import nova.core.block.BlockManager;
 import nova.core.event.EventBus;
 import nova.core.event.EventListener;

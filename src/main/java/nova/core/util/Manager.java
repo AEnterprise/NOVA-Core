@@ -6,7 +6,7 @@ import java.util.function.Function;
 /**
  * @author Calclavia
  */
-public abstract class Manager<T extends Identifiable, F extends Factory<T>> {
+public abstract class Manager<T extends Buildable, F extends Factory<T>> {
 	public final Registry<F> registry;
 
 	public Manager(Registry<F> registry) {
@@ -26,12 +26,7 @@ public abstract class Manager<T extends Identifiable, F extends Factory<T>> {
 
 	public Optional<T> get(String name) {
 		Optional<F> factory = getFactory(name);
-
-		if (factory.isPresent()) {
-			return Optional.of(factory.get().getDummy());
-		}
-
-		return Optional.empty();
+		return factory.map(Factory::resolve);
 	}
 
 	public Optional<F> getFactory(String name) {

@@ -1,6 +1,5 @@
 package nova.core.fluid;
 
-import nova.core.util.Factory;
 import nova.core.util.Identifiable;
 
 import java.util.function.Function;

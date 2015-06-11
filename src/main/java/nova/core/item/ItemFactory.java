@@ -2,7 +2,6 @@ package nova.core.item;
 
 import nova.core.retention.Data;
 import nova.core.retention.Storable;
-import nova.core.util.Factory;
 import nova.core.util.Identifiable;
 
 import java.util.function.Function;

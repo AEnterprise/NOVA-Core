@@ -1,7 +1,5 @@
 package nova.core.entity;
 
-import nova.core.util.Factory;
-
 import java.util.function.Function;
 
 /**

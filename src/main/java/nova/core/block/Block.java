@@ -9,7 +9,9 @@ import nova.core.event.EventBus;
 import nova.core.item.Item;
 import nova.core.item.ItemBlock;
 import nova.core.item.ItemFactory;
+import nova.core.util.Buildable;
 import nova.core.util.Direction;
+import nova.core.util.Factory;
 import nova.core.util.Identifiable;
 import nova.core.world.World;
 import nova.internal.core.Game;
@@ -23,7 +25,7 @@ import java.util.Set;
 /**
  * @author Calclavia
  */
-public abstract class Block extends ComponentProvider implements Identifiable {
+public abstract class Block extends ComponentProvider implements Buildable<Block> {
 
 	public final EventBus<Event> events = new EventBus<>();
 
@@ -44,8 +46,12 @@ public abstract class Block extends ComponentProvider implements Identifiable {
 	 * @return The {@link nova.core.block.BlockFactory} that refers to this
 	 * Block class.
 	 */
-	public final BlockFactory factory() {
+	public final Factory<Block> factory() {
 		return Game.blocks().getFactory(getID()).get();
+	}
+
+	public final String getID() {
+		return Game.blocks().
 	}
 
 	public final BlockTransform transform() {

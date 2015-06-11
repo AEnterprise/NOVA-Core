@@ -1,6 +1,5 @@
 package nova.core.fluid;
 
-import nova.core.block.BlockFactory;
 import nova.core.retention.Storable;
 import nova.core.retention.Store;
 import nova.core.util.Identifiable;
